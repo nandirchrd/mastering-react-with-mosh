@@ -1,11 +1,10 @@
+import Counter from './components/counter';
 import './App.css';
 
 function App() {
   return (
-    <div className='App'>
-      <header className='App-header'>
-        <h1>Hello World!</h1>
-      </header>
+    <div>
+      <Counter />
     </div>
   );
 }
