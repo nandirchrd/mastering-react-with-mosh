@@ -1,13 +1,13 @@
-import './App.css';
-
-function App() {
-  return (
-    <div className='App'>
-      <header className='App-header'>
-        <h1>Hello World!</h1>
-      </header>
-    </div>
-  );
+import React, { Component } from 'react';
+import Movies from './components/movies';
+class App extends Component {
+  render() {
+    return (
+      <main className='container'>
+        <Movies />
+      </main>
+    );
+  }
 }
 
 export default App;
