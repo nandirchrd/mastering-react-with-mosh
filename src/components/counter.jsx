@@ -1,43 +1,53 @@
 import React, { Component } from 'react';
 
 class Counter extends Component {
-  state = {
-    count: 0,
-    list: ['list1', 'list2', 'list3'],
-  };
-  handleIncrement = () => {
-    this.setState({ count: this.state.count + 1 });
-  };
-  formatCount = () => {
-    const { count } = this.state;
-    return count === 0 ? 'Zero' : count;
+  state = {};
+  getValue = () => {
+    const value = this.props.counter.value;
+    return value === 0 ? 'Zero' : value;
   };
   getBadgeClasses = () => {
     let classes = 'badge m-2 bg-';
-    classes += this.state.count === 0 ? 'warning text-dark' : 'primary ';
+    classes += this.getValue() === 'Zero' ? 'warning text-dark' : 'primary ';
     return classes;
   };
-  getList = () => {
-    const { list } = this.state;
-
-    return list.length === 0 ? (
-      <p>There are no list in the database</p>
-    ) : (
-      list.map((item) => <li key={item}>{item}</li>)
-    );
-  };
   render() {
-    const { count, list } = this.state;
+    // DESTRUCTURING PROPS
+    const { onIncrement, onDecrement, onDelete } = this.props; // methods
+    const { counter } = this.props; // properties
     return (
-      <>
-        <span className={this.getBadgeClasses()}>{this.formatCount()}</span>
+      <div>
+        <span
+          style={{
+            display: 'inline-block',
+            minWidth: '4em',
+          }}>
+          <span className={this.getBadgeClasses()}>{this.getValue()}</span>
+        </span>
         <button
-          onClick={this.handleIncrement}
-          className='btn btn-secondary btn-sm'>
-          Increment
+          onClick={() => onIncrement(counter)}
+          className={
+            this.getValue() >= 99
+              ? 'btn btn-success btn-sm mx-1 disabled'
+              : 'btn btn-success btn-sm mx-1'
+          }>
+          +
         </button>
-        <ul>{this.getList()}</ul>
-      </>
+        <button
+          onClick={() => onDecrement(counter)}
+          className={
+            this.getValue() === 'Zero'
+              ? 'btn btn-danger btn-sm mx-1 disabled'
+              : 'btn btn-danger btn-sm mx-1'
+          }>
+          -
+        </button>
+        <button
+          className='btn btn-outline-danger btn-sm mx-1'
+          onClick={() => onDelete(counter.id)}>
+          Delete
+        </button>
+      </div>
     );
   }
 }
