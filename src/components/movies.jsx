@@ -2,10 +2,14 @@ import React, { Component } from 'react';
 import { getMovies } from './../services/fakeMovieService';
 import { FaTrash } from 'react-icons/fa';
 import Like from './common/like';
+import Pagination from './pagination';
+import { paginate } from './utils/paginate';
 
 class Movies extends Component {
   state = {
     movies: getMovies(),
+    currPage: 1,
+    pageSize: 4,
   };
   componentDidUpdate() {
     console.log(this.state.movies);
@@ -21,15 +25,22 @@ class Movies extends Component {
     movies[index].liked = !movies[index].liked;
     this.setState({ movies });
   };
+  handleChange = (page) => {
+    this.setState({ currPage: page });
+  };
+  handlePaginate = (items, currPage, pageSize) => {
+    const index = (currPage - 1) * pageSize;
+    console.log(index);
+  };
   render() {
-    const { movies } = this.state;
-    const length = movies.length;
+    const { movies: allMovies, pageSize, currPage } = this.state;
 
-    if (length === 0) return <p>There are no movies in the database.</p>;
-
+    if (allMovies.length === 0)
+      return <p>There are no movies in the database.</p>;
+    const movies = paginate(allMovies, currPage, pageSize);
     return (
       <>
-        <p>Showing {length} movies in the database.</p>
+        <p>Showing {allMovies.length} movies in the database.</p>
         <table className='movies table'>
           <thead>
             <tr>
@@ -65,6 +76,12 @@ class Movies extends Component {
             ))}
           </tbody>
         </table>
+        <Pagination
+          itemsCount={allMovies.length}
+          pageSize={pageSize}
+          currPage={currPage}
+          onPageChange={this.handleChange}
+        />
       </>
     );
   }
